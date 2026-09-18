@@ -20,11 +20,10 @@ function drawPlayer() {
     )
 }
 
-
-
 function animLoop(){
     context.clearRect(0, 0, canvasElement.width, canvasElement.height)
     movePlayer()
+    canvasBorder()
     drawPlayer()
     requestAnimationFrame(animLoop)
 }
@@ -36,7 +35,6 @@ window.addEventListener("keydown", function(e) {
 window.addEventListener("keyup", function(e) {
     keys[e.key] = false
 })
-
 
 function movePlayer(){
     if (keys["w"] || keys["ArrowUp"]) {
@@ -57,7 +55,19 @@ function movePlayer(){
 }
 
 function canvasBorder(){
-    
+    if (player.x < 0){
+        player.x = 0
+    }
+    if (player.y < 0){
+        player.y = 0
+    }
+    if (player.x + player.width > canvasElement.width){
+        player.x = canvasElement.width - player.width
+    }
+    if (player.y + player.height > canvasElement.height){
+        player.y = canvasElement.height - player.height
+    }
 }
+
 
 animLoop()
