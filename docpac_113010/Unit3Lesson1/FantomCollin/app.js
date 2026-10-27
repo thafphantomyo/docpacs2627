@@ -6,6 +6,7 @@ const appName = process.env.APP_NAME;
 const app = express();
 const path = require('path');
 const requestLogger = require('./utils/requestLogger.js');
+const init = require('./scripts/initDb.js')
 
 app.use(requestLogger);
 
@@ -15,6 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+init()
 
 // Imports route endpoints from separate files
 // apart of the "controller" layer of MVC, as it handles controller logic.

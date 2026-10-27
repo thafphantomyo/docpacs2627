@@ -8,7 +8,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "initDb": "node scripts/initDb.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

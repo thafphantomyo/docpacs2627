@@ -1,12 +1,16 @@
-const db = new sql('/data/app.db', { verbose: console.log, fileMustExist: false })
+const db = require('../models/database')
 
-db.exec(
-    
-    `CREATE TABLE IF NOT EXISTS database (
+function init() {
+    db.exec(`
+    CREATE TABLE IF NOT EXISTS database (
        id INTEGER PRIMARY KEY,
        input TEXT NOT NULL,
        method TEXT NOT NULL,
-       timestamp TEXT DEFAULT CURRENT-TIMESTAMP         
-    )`
-    
-)
+       timestamp TEXT DEFAULT CURRENT_TIMESTAMP         
+    );`
+    );
+
+    console.log('Database initialized!');
+}
+
+module.exports = init
