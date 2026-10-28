@@ -6,7 +6,7 @@ const appName = process.env.APP_NAME;
 const app = express();
 const path = require('path');
 const requestLogger = require('./utils/requestLogger.js');
-const init = require('./scripts/initDb.js')
+const init = require('./scripts/initDb.js');
 
 app.use(requestLogger);
 
