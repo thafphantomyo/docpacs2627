@@ -21,12 +21,13 @@ console.log("Element:", usernameElement);
 console.log("textContent:", usernameElement.textContent);
 
 
-function submitScore(username, score) {
-    if (username.trim() === '' && username.length <= 20 && !Number.isInteger(score) && number >= 0){
+async function submitScore(username, score) {
+    if (username.trim() === '' || username.trim().length > 20 || !Number.isInteger(score) || score < 0){
         console.log("Can't submit - invalid data");
         return;
     }
-    fetch('/api/scores', {
+    try{
+    const response = await fetch('/api/scores', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -35,18 +36,11 @@ function submitScore(username, score) {
             name: username,
             score: score
         })
-    })
-        .then(response => {
-            console.log("Response received:", response);
-            return response.json();
-        })
-        .then(data => {
-            console.log("Server said:", data);
-        })
-        .catch(error => {
-            console.error("Error saving score:", error);
-        });
-};
+    });
+        const data =  response.json
+} catch (error) {
+    console.log("Error: Couldn't save score", error)
+}}
 
 function startGame() {
     console.log('GAME STARTINGGGGG!!!!!!!');
