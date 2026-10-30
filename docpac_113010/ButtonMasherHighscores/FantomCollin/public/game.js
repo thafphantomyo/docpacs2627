@@ -2,6 +2,7 @@ let score = 0;
 let timer = 20;
 let direction = 0; //top=0, right=1, down=2, left=3
 let gameloopVar;
+let controllerPollLoop;
 let directionrandomVar;
 let buttonAPressed = false;
 let buttonStartPressed = false;
@@ -17,12 +18,24 @@ const directions = ["Up", "Right", "Down", "Left"]
 const usernameElement = document.getElementById('input');
 console.log("Element:", usernameElement);
 console.log("textContent:", usernameElement.textContent);
-console.log("value:", usernameElement.value);
 
 
+function submitScore(username, score) {
+    fetch('/api/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: username,
+            score: score
+        })
+    })
+}
 
 function startGame() {
     console.log('GAME STARTINGGGGG!!!!!!!');
+    console.log("value:", usernameElement.value);
     console.log("Timer value at start:", timer);
     gameloopVar = setInterval(() => {
         console.log("Timer interval running! Timer is:", timer);
@@ -31,9 +44,12 @@ function startGame() {
 
         if (timer <= 0) {
             clearInterval(gameloopVar);
+            cancelAnimationFrame(controllerPollLoop)
             gameOver = true;
+            submitScore(username, score)
             directionBoxElement.textContent = "Press START to play again!";
             timerBoxElement.textContent = "Game Over!";
+            console.log("Fetch called");
         };
     }, 1000);
 
@@ -54,7 +70,7 @@ addEventListener("gamepadconnected", (e) => {
     controllerStatusElement.textContent = "Controller Connected";
     controller = e.gamepad;
     console.log(controller);
-    requestAnimationFrame(controllerPoll);
+    controllerPollLoop = requestAnimationFrame(controllerPoll);
 })
 
 addEventListener("gamepaddisconnected", (e) => {
@@ -97,7 +113,7 @@ function controllerPoll() {
         }
         buttonAPressed = controller.buttons[0].pressed
         buttonStartPressed = controller.buttons[9].pressed
-        requestAnimationFrame(controllerPoll)
+        controllerPollLoop = requestAnimationFrame(controllerPoll)
     }
 }
 

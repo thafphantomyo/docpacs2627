@@ -17,7 +17,12 @@ db.exec(`
 );
 console.log('Database initialized!');
 
-app.post('/api/highscores', (req, res))
+app.post('/api/scores', (req, res) => {
+    console.log('Received score data:', req.body);
+
+    res.json({ message: "Score reveived!" })
+    
+})
 
 
 
