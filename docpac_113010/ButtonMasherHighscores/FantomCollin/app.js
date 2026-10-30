@@ -18,9 +18,12 @@ db.exec(`
 console.log('Database initialized!');
 
 app.post('/api/scores', (req, res) => {
+    const insert = db.prepare('INSERT INTO database (name, score) VALUES (?,?)')
+    insert.run(req.body.name, req.body.score)
     console.log('Received score data:', req.body);
-
-    res.json({ message: "Score reveived!" })
+    const allScores = db.prepare('SELECT * FROM database').all();
+    console.log('All scores:', allScores);
+    res.json({ message: "Score received!" })
     
 })
 

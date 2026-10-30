@@ -10,6 +10,7 @@ let gameOver = false
 let randDirect
 let username;
 
+
 const scoreBoxElement = document.getElementById("scoreBox");
 const timerBoxElement = document.getElementById("timerBox");
 const directionBoxElement = document.getElementById("directionBox");
@@ -21,6 +22,10 @@ console.log("textContent:", usernameElement.textContent);
 
 
 function submitScore(username, score) {
+    if (username.trim() === '' && username.length <= 20 && !Number.isInteger(score) && number >= 0){
+        console.log("Can't submit - invalid data");
+        return;
+    }
     fetch('/api/scores', {
         method: 'POST',
         headers: {
@@ -31,7 +36,17 @@ function submitScore(username, score) {
             score: score
         })
     })
-}
+        .then(response => {
+            console.log("Response received:", response);
+            return response.json();
+        })
+        .then(data => {
+            console.log("Server said:", data);
+        })
+        .catch(error => {
+            console.error("Error saving score:", error);
+        });
+};
 
 function startGame() {
     console.log('GAME STARTINGGGGG!!!!!!!');
