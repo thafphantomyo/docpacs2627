@@ -17,6 +17,8 @@ const directionBoxElement = document.getElementById("directionBox");
 const controllerStatusElement = document.getElementById("controllerStatus");
 const directions = ["Up", "Right", "Down", "Left"]
 const usernameElement = document.getElementById('input');
+const submissionMessage = document.getElementById('submissionMessage');
+const highScoreLink = document.getElementById('highScore');
 console.log("Element:", usernameElement);
 console.log("textContent:", usernameElement.textContent);
 
@@ -26,6 +28,7 @@ async function submitScore(username, score) {
         console.log("Can't submit - invalid data");
         return;
     }
+    submissionMessage.textContent = 'Saving score...';
     try{
     const response = await fetch('/api/scores', {
         method: 'POST',
@@ -37,9 +40,20 @@ async function submitScore(username, score) {
             score: score
         })
     });
-        const data =  response.json
+const data = await response.json()
+
+if (response.ok) {
+    submissionMessage.textContent = 'Score saved'
+    highScoreLink.style.display = 'block'
+} else if (response.status === 400){
+    submissionMessage.textContent = 'Invalid name or score'
+} else {
+    submissionMessage.textContent = 'Score could not be saved'
+}
+
 } catch (error) {
     console.log("Error: Couldn't save score", error)
+    submissionMessage.textContent = 'SCORE COULD NOT BE SAVED!'
 }}
 
 function startGame() {

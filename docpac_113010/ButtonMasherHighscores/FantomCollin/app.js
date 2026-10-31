@@ -27,7 +27,7 @@ app.post('/api/scores', (req, res) => {
     
     const name = req.body.name
     const score = req.body.score
-    if (!String.isString(name) || name.trim === '' || name.trim.length > 20) {
+    if (typeof name.trim() !== 'string' || name.trim() === '' || name.trim().length > 20) {
         return res.status(400).json({error: 'Invalid player name'});
     };
     
@@ -35,18 +35,22 @@ app.post('/api/scores', (req, res) => {
         return res.status(400).json({error: 'Invalid score'})
     }
 
-    db.run(
-        'INSERT INTO database (name, score) VALUES (?,?)', [name.trim(), score],
-        function(err) {
-            if (err) {
-                consonle.error('Could not insert to database:', err.message)
+    try{
+        const result = db.prepare(
+            'INSERT INTO database (name, score) VALUES (?, ?)'
+        ).run(name.trim(), score);
 
-                return res.status(500).json({
-                    error: 'Could not save score'
-                });
-            };
-        }
-    );
+        return res.status(201).json({
+            message: 'Score saved successfully!',
+            id: result.lastInsertRowid
+        })
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({
+            error: 'Could not save score!'
+        })
+    }
 });
 
 
