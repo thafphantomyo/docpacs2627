@@ -31,3 +31,8 @@ body {
 a {
     color: rgb(6, 71, 6);
 }
+
+img {
+    width: 368px;
+    height: 208px;
+}
