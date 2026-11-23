@@ -1,0 +1,21 @@
+{
+  "name": "fantomcollin",
+  "version": "1.0.0",
+  "description": "Forum Message Board",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js"
+  },
+  "author": "me",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.11.1",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "path": "^0.12.7",
+    "sqlite3": "^6.0.1"
+  }
+}

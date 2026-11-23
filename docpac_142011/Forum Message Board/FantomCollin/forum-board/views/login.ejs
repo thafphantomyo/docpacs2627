@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+
+    <form method="post" action="/login">
+        <label class="element" for="usernameLogin">Username:</label> <br />
+        <input class="element" type="text" id="usernameLogin" name="usernameLogin">
+        <br />
+        <label class="element" for="passwordLogin">Password:</label><br />
+        <input class="element" type="password" id="passwordLogin" name="passwordLogin">
+        <br />
+        <button class="element">LOG IN!!</button>
+        <br />
+        <hr style="width:10000000000px" />
+    </form>
+    <% if (errMessage) { %>
+        <h2 class="element" style="color:red"><%- errMessage %></h2>
+        <% } %>
+            <hr length=9999999px />
+            <label class="element" for="loginLink">No Account?</label><br />
+            <a href="/register"><button class="element" name="loginLink">SIGN UP</button></a>
+            <%- include('partials/footer') %>
