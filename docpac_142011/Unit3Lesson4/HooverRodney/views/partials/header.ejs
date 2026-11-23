@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= pageTitle %>
+    </title>
+    <% if (pageTitle=="Form Page" ) { %>
+        <link rel="stylesheet" href="css/form.css">
+        <% } else if(pageTitle="Registration Form") { %>
+            <link rel="stylesheet" href="/css/register.css">
+        <% } else if(window.location.pathname = "/account") { %>
+            <link rel="stylesheet" href="css/account.css">
+        <% } %>
+            <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav>
+        <a href="/">Home Page</a>
+        <a href="/form">Form Page</a>
+        <a href="/session-test">Session Test</a>
+        <% if(isLoggedIn == false) {%>
+            <a href="/register">Create Account</a>
+            <a href="/login">Log In</a>
+        <% } else if(isLoggedIn == true) { %>
+            <a href="/account">My Account</a>
+        <% } %>
+    </nav>
+    <br><br>

@@ -1,0 +1,13 @@
+<%- include('partials/header') %>
+    <div class="element">
+        <label for="usernameee">USERNAME:</label> <br />
+        <h2 name="usersameee"><%- username %></h2>
+        <label for="emaileee">EMAIL:</label> <br />
+        <h2 name="emaileee"><%- email %></h2>
+        <label for="createeee">CREATION DATE:</label> <br />
+        <h2 name="createeee"><%- createDate %></h2>
+    </div>
+    <form method="post" action="/logout">
+        <button class="element">LOGOUT</button>
+    </form>
+    <%- include('partials/footer') %>

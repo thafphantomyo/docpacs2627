@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+    <h1>
+        <%= pageTitle %>
+    </h1>
+    <form id="loginForm" action="/register" method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter username here..." minlength="3" maxlength="20" required>
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" placeholder="Enter email address here..." maxlength="254" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter password here..." minlength="8" maxlength="64" required>
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Re-enter password here..." minlength="8" maxlength="64" required>
+        <button type="submit">Submit User Registration Form</button>
+        <button type="reset">Reset Form</button>
+        <p>Have an account? <a href="/login">Sign in!</a></p>
+        <% if (error) { %>
+            <p class="error">
+                <%= error %>
+            </p>
+            <% } %>
+    </form>
+<%- include('partials/footer') %>

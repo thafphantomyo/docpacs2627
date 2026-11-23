@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+
+        <h1 class="element">SIGN UP YO!!!</h1>
+        <form method="post" action="/register">
+                <label class="element" for="userSignup">Username:</label><br />
+                <input class="element" type="text" id="userSignup" name="userSignup">
+                <br />
+                <label class="element" for="emailSignup">Email Address:</label><br />
+                <input class="element" type="text" id="emailSignup" name="emailSignup">
+                <br />
+                <label class="element" for="passwordSignup">Password:</label><br />
+                <input class="element" type="password" id="passwordSignup" name="passwordSignup">
+                <br />
+                <label class="element" for="repasswordSignup">Repeat Password:</label><br />
+                <input class="element" type="password" id="repasswordSignup" name="repasswordSignup">
+                <br />
+                <button class="element">SIGN UP!!</button>
+                <br />
+                <hr style="width:10000000000px" />
+                <% if (foundDupe) { %>
+                        <h2 class="element" style="color:red"><%- foundDupe %></h2>
+                        <% } %>
+                <hr style="width:10000000000px" />
+        </form>
+        <label class="element" for="loginLink">Already Signed Up?</label><br />
+        <a href="/login"><button class="element" name="loginLink">LOGIN</button></a>
+
+        <%- include('partials/footer') %>
