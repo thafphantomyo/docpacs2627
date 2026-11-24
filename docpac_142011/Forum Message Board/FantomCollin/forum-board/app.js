@@ -21,7 +21,7 @@ app.use(
             httpOnly: true,
             secure: false,
             sameSite: 'lax',
-            maxAge: 12345678
+            maxAge: 999999999999999
         }
     })
 );
@@ -37,7 +37,7 @@ app.get('/', (req, res, next) => {
     try {
         const threads = db.prepare(`
             SELECT threads.id, threads.title, threads.created_at,
-                   users.id AS user_id, users.username
+            users.id AS user_id, users.username
             FROM threads
             JOIN users ON threads.user_id = users.id
             ORDER BY threads.created_at ASC, threads.id ASC
@@ -130,7 +130,8 @@ app.post('/login', async (req, res, next) => {
 
 app.use(function isAuthenticated(req, res, next) {
     if (req.session.userId) return next();
-    res.redirect('/login');})
+    res.redirect('/login');
+})
 
 app.post('/logout', (req, res, next) => {
     req.session.destroy((err) => {
@@ -140,11 +141,11 @@ app.post('/logout', (req, res, next) => {
     });
 });
 app.get('/profile', (req, res) => {
-    res.render('profile', {  })
+    res.render('profile', {})
 })
 
 app.get('/threads/new', (req, res) => {
-    res.render('newThread', {  });
+    res.render('newThread', {});
 });
 
 app.post('/threads', (req, res, next) => {
@@ -154,7 +155,7 @@ app.post('/threads', (req, res, next) => {
 
         let problem = null;
         if (!title) problem = 'Thread title is required.';
-        else if (title.length > 100) problem = 'Title must be 100 characters or fewer.';
+        else if (title.length > 50) problem = 'Title must be 100 characters or fewer.';
         else if (!body) problem = 'Thread body is required.';
         else if (body.length > 5000) problem = 'Post must be 5000 characters or fewer.';
 
@@ -173,6 +174,94 @@ app.post('/threads', (req, res, next) => {
         next(err);
     }
 });
+
+app.get('/threads/:id', (req, res) => {
+    const threadId = Number(req.params.id)
+
+    if (!Number.isInteger(threadId) || threadId < 1) {
+        return res.status(404).render('error', {
+            status: 404, statusInstr: 'Uh Oh! Not Found!', currentPage: 'newThread'
+        });
+    } else {
+        const findThreadById = db.prepare(`
+        SELECT threads.id, threads.title, threads.body, threads.created_at,
+        users.id AS user_id, users.username
+        FROM threads
+        JOIN users ON threads.user_id = users.id
+        WHERE threads.id = ?
+            `).get(threadId);
+
+        if (!findThreadById) {
+            return res.status(404).render('error', {
+                status: 404, statusInstr: 'Uh Oh! Not Found!', currentPage: 'newThread'
+            });
+        } else {
+            const replies = db.prepare(`
+    SELECT replies.id, replies.body, replies.created_at,
+    users.id AS user_id, users.username
+    FROM replies
+    JOIN users ON replies.user_id = users.id
+    WHERE replies.thread_id = ?
+    ORDER BY replies.created_at ASC, replies.id ASC
+`).all(threadId);
+
+res.render('thread', {
+    threadId: findThreadById.id,
+    title: findThreadById.title,
+    thread: findThreadById.body,
+    replies
+});
+    };
+}});
+
+app.post('/threads/:id/replies', (req, res, next) => {
+    const threadId = Number(req.params.id)
+    const reply = req.body.reply
+
+    if (!Number.isInteger(threadId) || threadId < 1) {
+        return res.status(404).render('error', {
+            status: 404, statusInstr: 'Uh Oh! Not Found!', currentPage: 'newThread'
+        });
+    } else {
+        const findThreadById = db.prepare(`
+        SELECT threads.id, threads.title, threads.body, threads.created_at,
+        users.id AS user_id, users.username
+        FROM threads
+        JOIN users ON threads.user_id = users.id
+        WHERE threads.id = ?
+            `).get(threadId);
+
+        if (!findThreadById) {
+            return res.status(404).render('error', {
+                status: 404, statusInstr: 'Uh Oh! Not Found!', currentPage: 'newThread'
+            });
+        } else {
+            const replies = db.prepare(`
+        SELECT replies.id, replies.body, replies.created_at,
+        users.id AS user_id, users.username
+        FROM replies
+        JOIN users ON replies.user_id = users.id
+        WHERE replies.thread_id = ?
+        ORDER BY replies.created_at ASC, replies.id ASC
+        `).all(threadId);
+            if (typeof reply !== 'string' || reply.trim() === '') {
+                return res.status(400).render('thread', {
+                    threadId: findThreadById.id,
+                    title: findThreadById.title, thread: findThreadById.body, reply: replies.body.trim(),
+                    message: 'Reply cannot be empty.'
+                });
+            } else {
+                function createReply(threadId, userId, body) {db.prepare(`
+            INSERT INTO replies (thread_id, user_id, body)
+            VALUES (?, ?, ?)
+            `).run(threadId, userId, body);}
+            createReply(threadId, req.session.userId, reply.trim())
+            res.redirect('/threads/' + threadId)
+            }
+        }
+    };
+});
+
 
 app.listen(6767, () => {
     console.log(`This jawn is running at port 6767`);

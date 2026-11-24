@@ -1,5 +1,28 @@
 <%- include('partials/header') %>
 
+<h1 id="title"><%- title %></h1>
+
+<div id="thread">
+        <%- thread %>
+</div>
+
+<div id="replies">
+    <form method="POST" action="/threads/<%= threadId %>/replies">
+        <textarea name="reply" placeholder="Reply here!!!111!!1"></textarea> <br/>
+        <button>REPLY!!!</button>
+    </form>
+
+    <% if (replies && replies.length > 0) { %>
+        <% replies.forEach(item => { %>
+            <div class="reply">
+                <strong><%= item.username %></strong>
+                <p><%= item.body %></p>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>No replies yet.</p>
+    <% } %>
+</div>
 
 
         <%- include('partials/footer') %>
