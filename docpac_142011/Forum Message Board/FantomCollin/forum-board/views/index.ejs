@@ -1,5 +1,23 @@
 <%- include('partials/header') %>
 
-    <h1>erm what the sigma</h1>
+    <h1>Forum Board</h1>
 
-    <%- include('partials/footer') %>
+    <% if (threads.length===0) { %>
+        <p>No threads yet.</p>
+        <% } else { %>
+            <ul>
+                <% threads.forEach(thread=> { %>
+                    <li>
+                        <a href="/threads/<%= thread.id %>">
+                            <%= thread.title %>
+                        </a>
+                        by <a href="/users/<%= thread.user_id %>">
+                            <%= thread.username %>
+                        </a>
+                        on <%= thread.created_at %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+                <%- include('partials/footer') %>

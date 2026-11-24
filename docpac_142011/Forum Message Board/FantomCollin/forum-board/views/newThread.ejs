@@ -1,5 +1,17 @@
 <%- include('partials/header') %>
 
+<h1>New Thread</h1>
 
+<form action="/threads" method="POST">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" maxlength="100" required>
+    </div>
+    <div>
+        <label for="body">Post</label>
+        <textarea id="body" name="body" rows="8" maxlength="5000" required></textarea>
+    </div>
+    <button type="submit">Create Thread</button>
+</form>
 
     <%- include('partials/footer') %>
